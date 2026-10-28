@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F3F7F5"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Agenda de contactos"
+        android:textColor="#145A46"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="12dp"
+        android:text="Guarda los contactos con quienes compartirás gastos."
+        android:textColor="#648076"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre completo"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etNombreContacto"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:hint="Ej.: Juan Pérez"
+        android:inputType="textCapWords"
+        android:singleLine="true"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Teléfono (opcional)"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etTelefonoContacto"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:hint="Ej.: +56912345678"
+        android:inputType="phone"
+        android:singleLine="true"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Correo electrónico (opcional)"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etCorreoContacto"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:hint="Ej.: juan@correo.cl"
+        android:inputType="textEmailAddress"
+        android:singleLine="true"
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/btnGuardarContacto"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#197653"
+        android:text="Guardar contacto"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnVolverContactos"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:text="Volver al menú"
+        android:textAllCaps="false" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Contactos registrados"
+        android:textColor="#145A46"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvContactosRegistrados"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="6dp"
+        android:gravity="top"
+        android:text="Todavía no hay contactos."
+        android:textColor="#193C32"
+        android:textSize="14sp" />
+
+</LinearLayout>
