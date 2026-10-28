@@ -62,8 +62,14 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btnGastosCompartidos.setOnClickListener(v ->
-                mostrarMensaje("Gastos compartidos y deudas"));
+        btnGastosCompartidos.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    HomeActivity.this,
+                    GastosCompartidosActivity.class
+            );
+
+            startActivity(intent);
+        });
 
         btnContactos.setOnClickListener(v -> {
             Intent intent = new Intent(
