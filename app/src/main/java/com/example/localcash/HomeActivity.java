@@ -1,6 +1,7 @@
 
 package com.example.localcash;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -43,9 +44,15 @@ public class HomeActivity extends AppCompatActivity {
                 findViewById(R.id.btnGastosCompartidos);
         Button btnContactos = findViewById(R.id.btnContactos);
 
-        // Programar las acciones de cada botón.
-        btnCuentas.setOnClickListener(v ->
-                mostrarMensaje("Cuentas y movimientos"));
+        // botones menu principal
+        btnCuentas.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    HomeActivity.this,
+                    CuentasActivity.class
+            );
+
+            startActivity(intent);
+        });
 
         btnCompras.setOnClickListener(v ->
                 mostrarMensaje("Compras e historial"));
