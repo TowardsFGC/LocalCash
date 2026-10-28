@@ -53,8 +53,14 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btnCompras.setOnClickListener(v ->
-                mostrarMensaje("Compras e historial"));
+        btnCompras.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    HomeActivity.this,
+                    ComprasActivity.class
+            );
+
+            startActivity(intent);
+        });
 
         btnGastosCompartidos.setOnClickListener(v ->
                 mostrarMensaje("Gastos compartidos y deudas"));

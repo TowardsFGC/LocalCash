@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F3F7F5"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Compras e historial"
+        android:textColor="#145A46"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Organiza tus compras y planifica tus gastos."
+        android:textColor="#648076"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Cuenta asociada"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rgCuentasCompra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <TextView
+        android:id="@+id/tvSinCuentasCompra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Primero debes crear una cuenta."
+        android:textColor="#B3261E"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre de la compra"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etNombreCompra"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:hint="Ej.: Compra de supermercado"
+        android:inputType="textCapSentences"
+        android:singleLine="true"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Monto (CLP)"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etMontoCompra"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:hint="Ej.: 25000"
+        android:inputType="numberDecimal"
+        android:singleLine="true"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Fecha de la compra"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvFechaCompra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Fecha seleccionada"
+        android:textColor="#193C32"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btnSeleccionarFecha"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Seleccionar fecha"
+        android:textAllCaps="false" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estado de la compra"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rgEstadoCompra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbRealizada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Realizada" />
+
+        <RadioButton
+            android:id="@+id/rbPlanificada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Planificada" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnGuardarCompra"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:backgroundTint="#197653"
+        android:text="Guardar compra"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnVolverCompras"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Volver al menú"
+        android:textAllCaps="false" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Últimas compras"
+        android:textColor="#145A46"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvComprasRegistradas"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="4dp"
+        android:gravity="top"
+        android:text="Todavía no hay compras."
+        android:textColor="#193C32"
+        android:textSize="13sp" />
+
+</LinearLayout>
+
