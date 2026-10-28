@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F3F7F5"
-    android:padding="20dp">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:text="Cuentas y movimientos"
         android:textColor="#145A46"
         android:textSize="26sp"
@@ -19,8 +19,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="12dp"
         android:text="Registra tus cuentas financieras."
         android:textColor="#648076"
         android:textSize="14sp" />
@@ -30,53 +30,49 @@
         android:layout_height="wrap_content"
         android:text="Nombre de la cuenta"
         android:textColor="#193C32"
-        android:textStyle="bold"
-        android:textSize="14sp" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etNombreCuenta"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="48dp"
         android:layout_marginTop="4dp"
         android:hint="Ej.: Mi efectivo"
         android:inputType="textCapSentences"
         android:singleLine="true"
-        android:padding="10dp" />
+        android:padding="8dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:text="Saldo inicial (CLP)"
         android:textColor="#193C32"
-        android:textStyle="bold"
-        android:textSize="14sp" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etSaldoInicial"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="48dp"
         android:layout_marginTop="4dp"
         android:hint="Ej.: 50000"
         android:inputType="numberDecimal"
         android:singleLine="true"
-        android:padding="10dp" />
+        android:padding="8dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Tipo de cuenta"
         android:textColor="#193C32"
-        android:textStyle="bold"
-        android:textSize="14sp" />
+        android:textStyle="bold" />
 
     <RadioGroup
         android:id="@+id/rgTipoCuenta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="4dp">
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rbEfectivo"
@@ -101,24 +97,33 @@
     <Button
         android:id="@+id/btnGuardarCuenta"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="48dp"
         android:backgroundTint="#197653"
         android:text="Guardar cuenta"
         android:textAllCaps="false"
         android:textColor="#FFFFFF" />
 
     <Button
-        android:id="@+id/btnVolver"
+        android:id="@+id/btnMovimientos"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#197653"
+        android:text="Registrar ingresos y gastos"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnVolver"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
         android:text="Volver al menú"
         android:textAllCaps="false" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         android:text="Mis cuentas"
         android:textColor="#145A46"
         android:textSize="20sp"
@@ -127,8 +132,10 @@
     <TextView
         android:id="@+id/tvCuentasRegistradas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="6dp"
+        android:gravity="top"
         android:text="Todavía no hay cuentas registradas."
         android:textColor="#193C32"
         android:textSize="14sp" />

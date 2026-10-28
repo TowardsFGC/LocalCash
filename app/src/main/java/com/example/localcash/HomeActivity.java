@@ -1,4 +1,3 @@
-
 package com.example.localcash;
 
 import android.content.Intent;
@@ -37,14 +36,14 @@ public class HomeActivity extends AppCompatActivity {
                     return insets;
                 });
 
-        // Obtener los botones del menú principal.
         Button btnCuentas = findViewById(R.id.btnCuentas);
         Button btnCompras = findViewById(R.id.btnCompras);
+
         Button btnGastosCompartidos =
                 findViewById(R.id.btnGastosCompartidos);
+
         Button btnContactos = findViewById(R.id.btnContactos);
 
-        // botones menu principal
         btnCuentas.setOnClickListener(v -> {
             Intent intent = new Intent(
                     HomeActivity.this,

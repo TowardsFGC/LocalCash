@@ -1,6 +1,7 @@
 package com.example.localcash;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -34,14 +35,32 @@ public class CuentasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cuentas);
+
         View mainView = findViewById(R.id.main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        final int paddingLeft = mainView.getPaddingLeft();
+        final int paddingTop = mainView.getPaddingTop();
+        final int paddingRight = mainView.getPaddingRight();
+        final int paddingBottom = mainView.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+                mainView, (v, insets) -> {
+
+                    Insets systemBars = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars());
+
+                    v.setPadding(
+                            paddingLeft + systemBars.left,
+                            paddingTop + systemBars.top,
+                            paddingRight + systemBars.right,
+                            paddingBottom + systemBars.bottom
+                    );
+
+                    return insets;
+                });
 
         etNombreCuenta = findViewById(R.id.etNombreCuenta);
         etSaldoInicial = findViewById(R.id.etSaldoInicial);
@@ -52,6 +71,9 @@ public class CuentasActivity extends AppCompatActivity {
         Button btnGuardarCuenta =
                 findViewById(R.id.btnGuardarCuenta);
 
+        Button btnMovimientos =
+                findViewById(R.id.btnMovimientos);
+
         Button btnVolver = findViewById(R.id.btnVolver);
 
         dbHelper = new LocalCashDbHelper(this);
@@ -60,6 +82,15 @@ public class CuentasActivity extends AppCompatActivity {
 
         btnGuardarCuenta.setOnClickListener(
                 v -> guardarCuenta());
+
+        btnMovimientos.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    CuentasActivity.this,
+                    MovimientosActivity.class
+            );
+
+            startActivity(intent);
+        });
 
         btnVolver.setOnClickListener(v -> finish());
 
@@ -93,8 +124,7 @@ public class CuentasActivity extends AppCompatActivity {
         try {
             saldoInicial = Double.parseDouble(saldoTexto);
         } catch (NumberFormatException e) {
-            etSaldoInicial.setError(
-                    "Ingresa un monto válido");
+            etSaldoInicial.setError("Ingresa un monto válido");
             etSaldoInicial.requestFocus();
             return;
         }
@@ -122,6 +152,33 @@ public class CuentasActivity extends AppCompatActivity {
 
         RadioButton radioTipo = findViewById(tipoId);
         String tipo = radioTipo.getText().toString();
+        // Evitar cuentas con nombres repetidos.
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        try (Cursor cursor = db.query(
+                "cuentas",
+                new String[]{"id"},
+                "nombre = ? COLLATE NOCASE",
+                new String[]{nombre},
+                null,
+                null,
+                null,
+                "1")) {
+
+            if (cursor.moveToFirst()) {
+                etNombreCuenta.setError(
+                        "Ya existe una cuenta con ese nombre");
+                etNombreCuenta.requestFocus();
+
+                Toast.makeText(
+                        this,
+                        "Esta cuenta ya está registrada",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                return;
+            }
+        }
 
         String fecha = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss",
@@ -133,8 +190,6 @@ public class CuentasActivity extends AppCompatActivity {
         values.put("tipo", tipo);
         values.put("saldo_inicial", saldoInicial);
         values.put("fecha_creacion", fecha);
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         long id = db.insert("cuentas", null, values);
 
@@ -166,18 +221,26 @@ public class CuentasActivity extends AppCompatActivity {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        try (Cursor cursor = db.query(
-                "cuentas",
-                new String[]{
-                        "nombre",
-                        "tipo",
-                        "saldo_inicial"
-                },
-                null,
-                null,
-                null,
-                null,
-                "id DESC")) {
+        String consulta =
+                "SELECT c.nombre, c.tipo, " +
+                        "c.saldo_inicial + COALESCE((" +
+                        "SELECT SUM(CASE " +
+                        "WHEN m.tipo = 'INGRESO' THEN m.monto " +
+                        "ELSE -m.monto END) " +
+                        "FROM movimientos m " +
+                        "WHERE m.cuenta_id = c.id" +
+                        "), 0) AS saldo_actual " +
+                        "FROM cuentas c " +
+                        "ORDER BY c.id DESC";
+
+        NumberFormat formatoMoneda =
+                NumberFormat.getCurrencyInstance(
+                        new Locale("es", "CL"));
+
+        formatoMoneda.setMaximumFractionDigits(0);
+        formatoMoneda.setMinimumFractionDigits(0);
+
+        try (Cursor cursor = db.rawQuery(consulta, null)) {
 
             if (cursor.getCount() == 0) {
                 tvCuentasRegistradas.setText(
@@ -185,17 +248,13 @@ public class CuentasActivity extends AppCompatActivity {
                 return;
             }
 
-            NumberFormat formatoMoneda =
-                    NumberFormat.getCurrencyInstance(
-                            new Locale("es", "CL"));
-
             int numero = 1;
 
             while (cursor.moveToNext()) {
 
                 String nombre = cursor.getString(0);
                 String tipo = cursor.getString(1);
-                double saldo = cursor.getDouble(2);
+                double saldoActual = cursor.getDouble(2);
 
                 texto.append(numero)
                         .append(". ")
@@ -203,8 +262,8 @@ public class CuentasActivity extends AppCompatActivity {
                         .append(" (")
                         .append(tipo)
                         .append(")")
-                        .append("\nSaldo inicial: ")
-                        .append(formatoMoneda.format(saldo))
+                        .append("\nSaldo actual: ")
+                        .append(formatoMoneda.format(saldoActual))
                         .append("\n\n");
 
                 numero++;
@@ -215,6 +274,15 @@ public class CuentasActivity extends AppCompatActivity {
     }
 
 
+    protected void onResume() {
+        super.onResume();
+
+        if (dbHelper != null && tvCuentasRegistradas != null) {
+            mostrarCuentas();
+        }
+    }
+
+
     protected void onDestroy() {
         if (dbHelper != null) {
             dbHelper.close();
@@ -222,5 +290,4 @@ public class CuentasActivity extends AppCompatActivity {
 
         super.onDestroy();
     }
-
 }

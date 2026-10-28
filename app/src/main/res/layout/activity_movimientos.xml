@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F3F7F5"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Ingresos y gastos"
+        android:textColor="#145A46"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Registra tus movimientos financieros."
+        android:textColor="#648076"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Selecciona una cuenta"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rgCuentas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <TextView
+        android:id="@+id/tvSinCuentas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Primero debes crear una cuenta."
+        android:textColor="#B3261E"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Tipo de movimiento"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rgTipoMovimiento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbIngreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingreso" />
+
+        <RadioButton
+            android:id="@+id/rbEgreso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gasto" />
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Monto (CLP)"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etMontoMovimiento"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:hint="Ej.: 15000"
+        android:inputType="numberDecimal"
+        android:singleLine="true"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Descripción"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etDescripcionMovimiento"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:hint="Ej.: Compra de alimentos"
+        android:inputType="textCapSentences"
+        android:singleLine="true"
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/btnGuardarMovimiento"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#197653"
+        android:text="Guardar movimiento"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnVolverMovimientos"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="Volver"
+        android:textAllCaps="false" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Últimos movimientos"
+        android:textColor="#145A46"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvMovimientosRegistrados"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="4dp"
+        android:gravity="top"
+        android:text="Todavía no hay movimientos."
+        android:textColor="#193C32"
+        android:textSize="13sp" />
+
+</LinearLayout>
