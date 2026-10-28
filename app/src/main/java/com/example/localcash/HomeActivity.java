@@ -1,0 +1,67 @@
+
+package com.example.localcash;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class HomeActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_home);
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+                findViewById(R.id.main), (v, insets) -> {
+
+                    Insets systemBars = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars());
+
+                    v.setPadding(
+                            systemBars.left,
+                            systemBars.top,
+                            systemBars.right,
+                            systemBars.bottom
+                    );
+
+                    return insets;
+                });
+
+        // Obtener los botones del menú principal.
+        Button btnCuentas = findViewById(R.id.btnCuentas);
+        Button btnCompras = findViewById(R.id.btnCompras);
+        Button btnGastosCompartidos =
+                findViewById(R.id.btnGastosCompartidos);
+        Button btnContactos = findViewById(R.id.btnContactos);
+
+        // Programar las acciones de cada botón.
+        btnCuentas.setOnClickListener(v ->
+                mostrarMensaje("Cuentas y movimientos"));
+
+        btnCompras.setOnClickListener(v ->
+                mostrarMensaje("Compras e historial"));
+
+        btnGastosCompartidos.setOnClickListener(v ->
+                mostrarMensaje("Gastos compartidos y deudas"));
+
+        btnContactos.setOnClickListener(v ->
+                mostrarMensaje("Agenda de contactos"));
+    }
+
+    private void mostrarMensaje(String modulo) {
+        Toast.makeText(
+                this,
+                modulo + ": módulo en desarrollo",
+                Toast.LENGTH_SHORT
+        ).show();
+    }
+}
