@@ -2,14 +2,17 @@ package com.example.localcash;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.text.InputType;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,6 +27,8 @@ import androidx.core.view.WindowInsetsCompat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Date;
 import java.util.Locale;
 
@@ -36,6 +41,11 @@ public class GastosCompartidosActivity extends AppCompatActivity {
 
     private EditText etNombreGasto;
     private EditText etMontoGasto;
+    private EditText etDetalleGasto;
+    private CheckBox cbRepartoPersonalizado;
+
+    private final ArrayList<ContactoGastoUI> filasContactos =
+            new ArrayList<>();
 
     private TextView tvSinCuentasGasto;
     private TextView tvSinContactosGasto;
@@ -81,6 +91,8 @@ public class GastosCompartidosActivity extends AppCompatActivity {
 
         etNombreGasto = findViewById(R.id.etNombreGasto);
         etMontoGasto = findViewById(R.id.etMontoGasto);
+        etDetalleGasto = findViewById(R.id.etDetalleGasto);
+        cbRepartoPersonalizado = findViewById(R.id.cbRepartoPersonalizado);
 
         tvSinCuentasGasto =
                 findViewById(R.id.tvSinCuentasGasto);
@@ -101,6 +113,9 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                 findViewById(R.id.btnVolverGastoCompartido);
 
         dbHelper = new LocalCashDbHelper(this);
+
+        cbRepartoPersonalizado.setOnCheckedChangeListener(
+                (buttonView, checked) -> actualizarVisibilidadDeudasPersonalizadas());
 
         cargarCuentas();
         cargarContactos();
@@ -174,9 +189,9 @@ public class GastosCompartidosActivity extends AppCompatActivity {
     private void cargarContactos() {
 
         llContactosGasto.removeAllViews();
+        filasContactos.clear();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-
         int cantidad = 0;
 
         try (Cursor cursor = db.query(
@@ -189,29 +204,80 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                 "nombre COLLATE NOCASE ASC")) {
 
             while (cursor.moveToNext()) {
-
                 long contactoId = cursor.getLong(0);
                 String nombre = cursor.getString(1);
 
-                CheckBox checkBox = new CheckBox(this);
+                LinearLayout fila = new LinearLayout(this);
+                fila.setOrientation(LinearLayout.HORIZONTAL);
+                fila.setGravity(android.view.Gravity.CENTER_VERTICAL);
+                fila.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
 
+                CheckBox checkBox = new CheckBox(this);
                 checkBox.setId(View.generateViewId());
                 checkBox.setTag(contactoId);
                 checkBox.setText(nombre);
                 checkBox.setTextSize(14);
+                checkBox.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f));
 
-                llContactosGasto.addView(checkBox);
+                EditText etDeuda = new EditText(this);
+                etDeuda.setId(View.generateViewId());
+                etDeuda.setHint("Deuda CLP");
+                etDeuda.setSingleLine(true);
+                etDeuda.setInputType(InputType.TYPE_CLASS_NUMBER);
+                etDeuda.setTextSize(13);
+                etDeuda.setPadding(8, 4, 8, 4);
+                etDeuda.setLayoutParams(new LinearLayout.LayoutParams(
+                        dpApx(112),
+                        dpApx(44)));
+                etDeuda.setVisibility(View.GONE);
 
+                ContactoGastoUI contactoUI =
+                        new ContactoGastoUI(contactoId, checkBox, etDeuda);
+                filasContactos.add(contactoUI);
+
+                checkBox.setOnCheckedChangeListener((buttonView, checked) -> {
+                    boolean mostrarMonto = checked
+                            && cbRepartoPersonalizado.isChecked();
+                    etDeuda.setVisibility(mostrarMonto ? View.VISIBLE : View.GONE);
+                    if (!checked) {
+                        etDeuda.setText("");
+                    }
+                });
+
+                fila.addView(checkBox);
+                fila.addView(etDeuda);
+                llContactosGasto.addView(fila);
                 cantidad++;
             }
         }
 
         hayContactos = cantidad > 0;
-
         tvSinContactosGasto.setVisibility(
                 hayContactos ? View.GONE : View.VISIBLE);
 
         actualizarEstadoBoton();
+        actualizarVisibilidadDeudasPersonalizadas();
+    }
+
+    private int dpApx(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
+    }
+
+    private void actualizarVisibilidadDeudasPersonalizadas() {
+        boolean personalizado = cbRepartoPersonalizado.isChecked();
+        for (ContactoGastoUI contacto : filasContactos) {
+            boolean seleccionado = contacto.checkBox.isChecked();
+            contacto.etDeuda.setVisibility(
+                    personalizado && seleccionado ? View.VISIBLE : View.GONE);
+            if (!personalizado) {
+                contacto.etDeuda.setText("");
+            }
+        }
     }
 
     private void actualizarEstadoBoton() {
@@ -222,52 +288,49 @@ public class GastosCompartidosActivity extends AppCompatActivity {
 
     private void guardarGastoCompartido() {
 
-        int cuentaSeleccionada =
-                rgCuentasGasto.getCheckedRadioButtonId();
-
+        int cuentaSeleccionada = rgCuentasGasto.getCheckedRadioButtonId();
         if (cuentaSeleccionada == -1) {
-            Toast.makeText(
-                    this,
-                    "Selecciona la cuenta que pagó",
-                    Toast.LENGTH_SHORT
-            ).show();
+            Toast.makeText(this, "Selecciona la cuenta que pagó", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        RadioButton radioCuenta =
-                findViewById(cuentaSeleccionada);
+        RadioButton radioCuenta = findViewById(cuentaSeleccionada);
+        long cuentaId = ((Number) radioCuenta.getTag()).longValue();
 
-        long cuentaId =
-                ((Number) radioCuenta.getTag()).longValue();
-
-        String nombre = etNombreGasto.getText()
-                .toString().trim();
-
+        String nombre = etNombreGasto.getText().toString().trim();
         if (nombre.isEmpty()) {
-            etNombreGasto.setError(
-                    "Ingresa el nombre del gasto");
+            etNombreGasto.setError("Ingresa el nombre del gasto");
             etNombreGasto.requestFocus();
             return;
         }
 
-        String montoTexto = etMontoGasto.getText()
-                .toString().trim()
-                .replace(",", ".");
+        String detalleTexto = etDetalleGasto.getText().toString().trim();
+        ArrayList<String> detalles = new ArrayList<>();
+        for (String linea : detalleTexto.split("\\r?\\n")) {
+            String detalle = linea.trim();
+            if (!detalle.isEmpty()) {
+                detalles.add(detalle);
+            }
+        }
+        if (detalles.isEmpty()) {
+            etDetalleGasto.setError(
+                    "Agrega al menos un producto o servicio, uno por línea");
+            etDetalleGasto.requestFocus();
+            return;
+        }
 
+        String montoTexto = etMontoGasto.getText().toString().trim().replace(",", ".");
         if (montoTexto.isEmpty()) {
-            etMontoGasto.setError(
-                    "Ingresa el monto total");
+            etMontoGasto.setError("Ingresa el monto total");
             etMontoGasto.requestFocus();
             return;
         }
 
         double montoIngresado;
-
         try {
             montoIngresado = Double.parseDouble(montoTexto);
         } catch (NumberFormatException e) {
-            etMontoGasto.setError(
-                    "Ingresa un monto válido");
+            etMontoGasto.setError("Ingresa un monto válido");
             etMontoGasto.requestFocus();
             return;
         }
@@ -276,108 +339,99 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                 || Double.isInfinite(montoIngresado)
                 || montoIngresado <= 0
                 || montoIngresado > Long.MAX_VALUE) {
-
-            etMontoGasto.setError(
-                    "El monto debe ser mayor que cero");
+            etMontoGasto.setError("El monto debe ser mayor que cero");
             etMontoGasto.requestFocus();
             return;
         }
 
         long montoTotal = Math.round(montoIngresado);
-
         if (Math.abs(montoIngresado - montoTotal) > 0.000001) {
-            etMontoGasto.setError(
-                    "Introduce el monto en pesos enteros");
+            etMontoGasto.setError("Introduce el monto en pesos enteros");
             etMontoGasto.requestFocus();
             return;
         }
 
-        ArrayList<Long> contactosSeleccionados =
-                new ArrayList<>();
-
-        for (int i = 0;
-             i < llContactosGasto.getChildCount();
-             i++) {
-
-            View elemento = llContactosGasto.getChildAt(i);
-
-            if (elemento instanceof CheckBox) {
-
-                CheckBox checkBox = (CheckBox) elemento;
-
-                if (checkBox.isChecked()) {
-
-                    long contactoId =
-                            ((Number) checkBox.getTag()).longValue();
-
-                    contactosSeleccionados.add(contactoId);
-                }
+        ArrayList<ContactoGastoUI> seleccionados = new ArrayList<>();
+        for (ContactoGastoUI contacto : filasContactos) {
+            if (contacto.checkBox.isChecked()) {
+                seleccionados.add(contacto);
             }
         }
 
-        if (contactosSeleccionados.isEmpty()) {
-            Toast.makeText(
-                    this,
-                    "Selecciona al menos un contacto",
-                    Toast.LENGTH_SHORT
-            ).show();
+        if (seleccionados.isEmpty()) {
+            Toast.makeText(this, "Selecciona al menos un contacto", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Se divide el total entre el usuario y los contactos.
-        int totalParticipantes =
-                contactosSeleccionados.size() + 1;
+        // El mapa guarda el monto que cada contacto debe devolver.
+        Map<Long, Long> montosDeuda = new LinkedHashMap<>();
+        long sumaDeudas = 0L;
 
-        long parteBase = montoTotal / totalParticipantes;
-        long resto = montoTotal % totalParticipantes;
+        if (cbRepartoPersonalizado.isChecked()) {
+            for (ContactoGastoUI contacto : seleccionados) {
+                String deudaTexto = contacto.etDeuda.getText().toString().trim();
+                if (deudaTexto.isEmpty()) {
+                    contacto.etDeuda.setError("Indica cuánto debe esta persona");
+                    contacto.etDeuda.requestFocus();
+                    return;
+                }
 
-        if (parteBase <= 0) {
-            Toast.makeText(
-                    this,
-                    "El monto es demasiado pequeño para repartirlo",
-                    Toast.LENGTH_LONG
-            ).show();
-            return;
+                long montoDeuda;
+                try {
+                    montoDeuda = Long.parseLong(deudaTexto);
+                } catch (NumberFormatException e) {
+                    contacto.etDeuda.setError("Monto entero válido");
+                    contacto.etDeuda.requestFocus();
+                    return;
+                }
+
+                if (montoDeuda <= 0 || montoDeuda > montoTotal - sumaDeudas) {
+                    contacto.etDeuda.setError(
+                            "La deuda debe ser positiva y no superar el total restante");
+                    contacto.etDeuda.requestFocus();
+                    return;
+                }
+
+                montosDeuda.put(contacto.contactoId, montoDeuda);
+                sumaDeudas += montoDeuda;
+            }
+        } else {
+            int totalParticipantes = seleccionados.size() + 1;
+            long parteBase = montoTotal / totalParticipantes;
+            if (parteBase <= 0) {
+                Toast.makeText(this,
+                        "El monto es demasiado pequeño para repartirlo",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+            for (ContactoGastoUI contacto : seleccionados) {
+                montosDeuda.put(contacto.contactoId, parteBase);
+                sumaDeudas += parteBase;
+            }
         }
 
+        long parteUsuario = montoTotal - sumaDeudas;
         String fecha = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss",
-                Locale.US
-        ).format(new Date());
+                "yyyy-MM-dd HH:mm:ss", Locale.US).format(new Date());
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
         boolean guardado = false;
-
         db.beginTransaction();
 
         try {
-
-            // Registrar el pago total como un único egreso.
             ContentValues movimiento = new ContentValues();
-
             movimiento.put("cuenta_id", cuentaId);
             movimiento.put("tipo", "EGRESO");
             movimiento.put("monto", (double) montoTotal);
-            movimiento.put(
-                    "descripcion",
-                    "Gasto compartido: " + nombre);
+            movimiento.put("descripcion", "Gasto compartido: " + nombre);
             movimiento.put("fecha", fecha);
 
-            long movimientoId = db.insert(
-                    "movimientos",
-                    null,
-                    movimiento
-            );
-
+            long movimientoId = db.insert("movimientos", null, movimiento);
             if (movimientoId == -1) {
-                throw new IllegalStateException(
-                        "No se pudo registrar el egreso");
+                throw new IllegalStateException("No se pudo registrar el egreso");
             }
 
-            // Guardar el gasto compartido.
             ContentValues gasto = new ContentValues();
-
             gasto.put("nombre", nombre);
             gasto.put("monto_total", (double) montoTotal);
             gasto.put("fecha", fecha);
@@ -385,36 +439,30 @@ public class GastosCompartidosActivity extends AppCompatActivity {
             gasto.put("movimiento_id", movimientoId);
             gasto.put("fecha_registro", fecha);
 
-            long gastoId = db.insert(
-                    "gastos_compartidos",
-                    null,
-                    gasto
-            );
-
+            long gastoId = db.insert("gastos_compartidos", null, gasto);
             if (gastoId == -1) {
-                throw new IllegalStateException(
-                        "No se pudo registrar el gasto compartido");
+                throw new IllegalStateException("No se pudo registrar el gasto compartido");
             }
 
-            // Registrar una deuda pendiente por contacto.
-            for (Long contactoId : contactosSeleccionados) {
+            // Guardar un registro por producto o servicio indicado en el formulario.
+            for (String detalle : detalles) {
+                ContentValues item = new ContentValues();
+                item.put("gasto_id", gastoId);
+                item.put("descripcion", detalle);
+                if (db.insert("gastos_compartidos_detalles", null, item) == -1) {
+                    throw new IllegalStateException("No se pudo guardar el detalle del gasto");
+                }
+            }
 
+            for (Map.Entry<Long, Long> deudaContacto : montosDeuda.entrySet()) {
                 ContentValues deuda = new ContentValues();
-
                 deuda.put("gasto_id", gastoId);
-                deuda.put("contacto_id", contactoId);
-                deuda.put("monto_deuda", (double) parteBase);
+                deuda.put("contacto_id", deudaContacto.getKey());
+                deuda.put("monto_deuda", (double) deudaContacto.getValue());
                 deuda.put("estado", "PENDIENTE");
 
-                long deudaId = db.insert(
-                        "deudas_compartidas",
-                        null,
-                        deuda
-                );
-
-                if (deudaId == -1) {
-                    throw new IllegalStateException(
-                            "No se pudo registrar una de las deudas");
+                if (db.insert("deudas_compartidas", null, deuda) == -1) {
+                    throw new IllegalStateException("No se pudo registrar una de las deudas");
                 }
             }
 
@@ -422,13 +470,9 @@ public class GastosCompartidosActivity extends AppCompatActivity {
             guardado = true;
 
         } catch (Exception e) {
-
-            Toast.makeText(
-                    this,
-                    "No se pudo guardar el gasto compartido",
-                    Toast.LENGTH_LONG
-            ).show();
-
+            Toast.makeText(this,
+                    "No se pudo guardar el gasto compartido. Revisa los datos e inténtalo otra vez.",
+                    Toast.LENGTH_LONG).show();
         } finally {
             db.endTransaction();
         }
@@ -437,34 +481,30 @@ public class GastosCompartidosActivity extends AppCompatActivity {
             return;
         }
 
-        NumberFormat formatoMoneda =
-                NumberFormat.getCurrencyInstance(
-                        new Locale("es", "CL"));
-
+        NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance(new Locale("es", "CL"));
         formatoMoneda.setMaximumFractionDigits(0);
         formatoMoneda.setMinimumFractionDigits(0);
 
-        Toast.makeText(
-                this,
-                "Gasto guardado. Cada contacto debe " +
-                        formatoMoneda.format(parteBase) +
-                        ". Tu parte es " +
-                        formatoMoneda.format(parteBase + resto),
-                Toast.LENGTH_LONG
-        ).show();
+        String mensaje;
+        if (cbRepartoPersonalizado.isChecked()) {
+            mensaje = "Gasto guardado con deudas personalizadas. Tu parte es "
+                    + formatoMoneda.format(parteUsuario);
+        } else {
+            long parteContacto = montosDeuda.isEmpty()
+                    ? 0L : montosDeuda.values().iterator().next();
+            mensaje = "Gasto guardado. Cada contacto debe "
+                    + formatoMoneda.format(parteContacto)
+                    + ". Tu parte es " + formatoMoneda.format(parteUsuario);
+        }
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
 
         etNombreGasto.setText("");
         etMontoGasto.setText("");
-
-        for (int i = 0;
-             i < llContactosGasto.getChildCount();
-             i++) {
-
-            View elemento = llContactosGasto.getChildAt(i);
-
-            if (elemento instanceof CheckBox) {
-                ((CheckBox) elemento).setChecked(false);
-            }
+        etDetalleGasto.setText("");
+        cbRepartoPersonalizado.setChecked(false);
+        for (ContactoGastoUI contacto : filasContactos) {
+            contacto.checkBox.setChecked(false);
+            contacto.etDeuda.setText("");
         }
 
         mostrarGastosCompartidos();
@@ -488,7 +528,7 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                         "g.fecha, a.nombre " +
                         "FROM gastos_compartidos g " +
                         "INNER JOIN cuentas a ON a.id = g.cuenta_id " +
-                        "ORDER BY g.id DESC LIMIT 3";
+                        "ORDER BY g.id DESC";
 
         try (Cursor cursor = db.rawQuery(consulta, null)) {
 
@@ -513,7 +553,22 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                         .append(cuenta)
                         .append("\nFecha: ")
                         .append(fecha)
-                        .append("\nDeudas:\n");
+                        .append("\nProductos/servicios:");
+
+                boolean tieneDetalles = false;
+                try (Cursor detalles = db.rawQuery(
+                        "SELECT descripcion FROM gastos_compartidos_detalles " +
+                                "WHERE gasto_id = ? ORDER BY id ASC",
+                        new String[]{String.valueOf(gastoId)})) {
+                    while (detalles.moveToNext()) {
+                        tieneDetalles = true;
+                        texto.append("\n  - ").append(detalles.getString(0));
+                    }
+                }
+                if (!tieneDetalles) {
+                    texto.append("\n  (Sin detalle registrado)");
+                }
+                texto.append("\nDeudas:\n");
 
                 try (Cursor deudas = db.rawQuery(
                         "SELECT c.nombre, d.monto_deuda, d.estado " +
@@ -551,7 +606,19 @@ public class GastosCompartidosActivity extends AppCompatActivity {
         tvGastosCompartidos.setText(texto.toString());
     }
 
-    @Override
+    private static class ContactoGastoUI {
+        final long contactoId;
+        final CheckBox checkBox;
+        final EditText etDeuda;
+
+        ContactoGastoUI(long contactoId, CheckBox checkBox, EditText etDeuda) {
+            this.contactoId = contactoId;
+            this.checkBox = checkBox;
+            this.etDeuda = etDeuda;
+        }
+    }
+
+
     protected void onResume() {
         super.onResume();
 
@@ -560,7 +627,7 @@ public class GastosCompartidosActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+
     protected void onDestroy() {
         if (dbHelper != null) {
             dbHelper.close();

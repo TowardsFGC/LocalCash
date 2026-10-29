@@ -388,7 +388,7 @@ public class MovimientosActivity extends AppCompatActivity {
                 LocationListener listener =
                         new LocationListener() {
 
-                            @Override
+
                             public void onLocationChanged(
                                     Location location) {
 
@@ -403,19 +403,19 @@ public class MovimientosActivity extends AppCompatActivity {
                                 );
                             }
 
-                            @Override
+
                             public void onStatusChanged(
                                     String provider,
                                     int status,
                                     Bundle extras) {
                             }
 
-                            @Override
+
                             public void onProviderEnabled(
                                     String provider) {
                             }
 
-                            @Override
+
                             public void onProviderDisabled(
                                     String provider) {
                             }
@@ -504,7 +504,7 @@ public class MovimientosActivity extends AppCompatActivity {
         mostrarMovimientos();
     }
 
-    @Override
+
     public void onRequestPermissionsResult(
             int requestCode,
             String[] permissions,
@@ -596,7 +596,7 @@ public class MovimientosActivity extends AppCompatActivity {
         tvMovimientosRegistrados.setText(texto.toString());
     }
 
-    @Override
+
     protected void onDestroy() {
 
         if (dbHelper != null) {

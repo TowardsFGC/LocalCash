@@ -1,4 +1,3 @@
-
 package com.example.localcash;
 
 import android.app.DatePickerDialog;
@@ -31,6 +30,7 @@ public class ComprasActivity extends AppCompatActivity {
     private LocalCashDbHelper dbHelper;
 
     private RadioGroup rgCuentasCompra;
+    private RadioGroup rgContactosCompra;
     private RadioGroup rgEstadoCompra;
 
     private EditText etNombreCompra;
@@ -39,6 +39,7 @@ public class ComprasActivity extends AppCompatActivity {
     private TextView tvFechaCompra;
     private TextView tvComprasRegistradas;
     private TextView tvSinCuentasCompra;
+    private TextView tvSinContactosCompra;
 
     private Button btnGuardarCompra;
 
@@ -75,6 +76,7 @@ public class ComprasActivity extends AppCompatActivity {
                 });
 
         rgCuentasCompra = findViewById(R.id.rgCuentasCompra);
+        rgContactosCompra = findViewById(R.id.rgContactosCompra);
         rgEstadoCompra = findViewById(R.id.rgEstadoCompra);
 
         etNombreCompra = findViewById(R.id.etNombreCompra);
@@ -85,6 +87,8 @@ public class ComprasActivity extends AppCompatActivity {
                 findViewById(R.id.tvComprasRegistradas);
         tvSinCuentasCompra =
                 findViewById(R.id.tvSinCuentasCompra);
+        tvSinContactosCompra =
+                findViewById(R.id.tvSinContactosCompra);
 
         Button btnSeleccionarFecha =
                 findViewById(R.id.btnSeleccionarFecha);
@@ -102,6 +106,7 @@ public class ComprasActivity extends AppCompatActivity {
         rgEstadoCompra.check(R.id.rbRealizada);
 
         cargarCuentas();
+        cargarContactos();
         mostrarCompras();
 
         btnSeleccionarFecha.setOnClickListener(
@@ -221,6 +226,49 @@ public class ComprasActivity extends AppCompatActivity {
         btnGuardarCompra.setEnabled(hayCuentas);
     }
 
+    private void cargarContactos() {
+
+        rgContactosCompra.removeAllViews();
+
+        // La asociación es opcional: la compra puede quedar sin contacto.
+        RadioButton rbSinContacto = new RadioButton(this);
+        rbSinContacto.setId(View.generateViewId());
+        rbSinContacto.setText("Sin contacto asociado");
+        rbSinContacto.setTextSize(14);
+        rbSinContacto.setTag(0L);
+        rgContactosCompra.addView(rbSinContacto);
+        rgContactosCompra.check(rbSinContacto.getId());
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        int cantidad = 0;
+
+        try (Cursor cursor = db.query(
+                "contactos",
+                new String[]{"id", "nombre"},
+                null,
+                null,
+                null,
+                null,
+                "nombre COLLATE NOCASE ASC")) {
+
+            while (cursor.moveToNext()) {
+                long contactoId = cursor.getLong(0);
+                String nombre = cursor.getString(1);
+
+                RadioButton radio = new RadioButton(this);
+                radio.setId(View.generateViewId());
+                radio.setTag(contactoId);
+                radio.setText(nombre);
+                radio.setTextSize(14);
+                rgContactosCompra.addView(radio);
+                cantidad++;
+            }
+        }
+
+        tvSinContactosCompra.setVisibility(
+                cantidad == 0 ? View.VISIBLE : View.GONE);
+    }
+
     private void guardarCompra() {
 
         int cuentaSeleccionada =
@@ -322,6 +370,16 @@ public class ComprasActivity extends AppCompatActivity {
             return;
         }
 
+        long contactoId = 0L;
+        int contactoSeleccionado = rgContactosCompra.getCheckedRadioButtonId();
+        if (contactoSeleccionado != -1) {
+            RadioButton radioContacto = findViewById(contactoSeleccionado);
+            Object tag = radioContacto.getTag();
+            if (tag instanceof Number) {
+                contactoId = ((Number) tag).longValue();
+            }
+        }
+
         String fechaRegistro = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss",
                 Locale.US
@@ -342,6 +400,9 @@ public class ComprasActivity extends AppCompatActivity {
             compra.put("estado", estado);
             compra.put("fecha_registro", fechaRegistro);
             compra.put("cuenta_id", cuentaId);
+            if (contactoId > 0) {
+                compra.put("contacto_id", contactoId);
+            }
 
             long compraId = db.insert(
                     "compras",
@@ -449,10 +510,11 @@ public class ComprasActivity extends AppCompatActivity {
 
         String consulta =
                 "SELECT c.nombre, c.monto, c.fecha_compra, " +
-                        "c.estado, a.nombre " +
+                        "c.estado, a.nombre, co.nombre " +
                         "FROM compras c " +
                         "LEFT JOIN cuentas a ON a.id = c.cuenta_id " +
-                        "ORDER BY c.id DESC LIMIT 5";
+                        "LEFT JOIN contactos co ON co.id = c.contacto_id " +
+                        "ORDER BY c.id DESC";
 
         try (Cursor cursor = db.rawQuery(consulta, null)) {
 
@@ -469,6 +531,7 @@ public class ComprasActivity extends AppCompatActivity {
                 String fecha = cursor.getString(2);
                 String estado = cursor.getString(3);
                 String cuenta = cursor.getString(4);
+                String contacto = cursor.getString(5);
 
                 String estadoVisible =
                         estado.equals("PLANIFICADA")
@@ -486,6 +549,8 @@ public class ComprasActivity extends AppCompatActivity {
                         .append(formatoMoneda.format(monto))
                         .append("\nFecha: ")
                         .append(fecha)
+                        .append("\nContacto: ")
+                        .append(contacto == null ? "Sin asociar" : contacto)
                         .append("\n\n");
             }
         }
@@ -493,7 +558,7 @@ public class ComprasActivity extends AppCompatActivity {
         tvComprasRegistradas.setText(texto.toString());
     }
 
-    @Override
+
     protected void onDestroy() {
 
         if (dbHelper != null) {
