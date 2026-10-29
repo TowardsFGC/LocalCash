@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="8dp"
-        android:text="Explora el mapa de tus movimientos financieros."
+        android:text="Consulta tus movimientos en el mapa."
         android:textColor="#648076"
         android:textSize="13sp" />
 
@@ -31,20 +31,50 @@
         android:layout_weight="1" />
 
     <TextView
+        android:id="@+id/tvResumenMovimientos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:text="Consultando movimientos..."
+        android:textColor="#648076"
+        android:textSize="12sp" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="Cartografía © OpenStreetMap contributors · OpenFreeMap"
+        android:textColor="#648076"
+        android:textSize="10sp" />
+
+    <TextView
         android:id="@+id/tvEstadoMapa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="Cargando movimientos con ubicación..."
-        android:textColor="#648076"
+        android:text="El mapa offline aún no está descargado."
+        android:textColor="#145A46"
         android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btnDescargarMapaOffline"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="#197653"
+        android:text="Descargar mapa para usar sin Internet"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/btnVolverMapa"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="5dp"
         android:text="Volver al menú"
         android:textAllCaps="false" />
 

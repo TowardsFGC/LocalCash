@@ -57,6 +57,8 @@ dependencies {
     androidTestImplementation libs.ext.junit
     // Autenticación biométrica
     implementation 'androidx.biometric:biometric:1.1.0'
-    // mapa
+    // mapa con net
     implementation 'org.maplibre.gl:android-sdk:11.13.5'
+    // sin net
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 }
