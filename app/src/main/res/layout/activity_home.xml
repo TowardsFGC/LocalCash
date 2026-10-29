@@ -1,45 +1,71 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:background="#F3F7F5"
-    android:padding="24dp">
+    android:background="#F3F6F5"
+    android:padding="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Encabezado principal -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="LocalCash"
-        android:textColor="#145A46"
-        android:textSize="32sp"
+        android:orientation="vertical"
+        android:background="#123D32"
+        android:padding="24dp"
+        android:layout_marginBottom="28dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LocalCash"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TU DINERO, MEJOR ORGANIZADO"
+            android:textColor="#B9E5D5"
+            android:textSize="12sp"
+            android:letterSpacing="0.06" />
+
+        <View
+            android:layout_width="46dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="18dp"
+            android:background="#55D6A3" />
+
+    </LinearLayout>
+
+    <!-- Título de la sección -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hola, bienvenido"
+        android:textColor="#173C32"
+        android:textSize="25sp"
         android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="PANEL PRINCIPAL"
-        android:textColor="#648076"
-        android:textSize="14sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="6dp"
         android:layout_marginBottom="20dp"
-        android:text="¿Qué deseas hacer?"
-        android:textColor="#193C32"
-        android:textSize="21sp"
-        android:textStyle="bold" />
+        android:text="¿Qué quieres gestionar hoy?"
+        android:textColor="#687B74"
+        android:textSize="15sp" />
 
+    <!-- Accesos principales -->
     <Button
         android:id="@+id/btnCuentas"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="#197653"
         android:text="Cuentas y movimientos"
         android:textAllCaps="false"
@@ -50,52 +76,53 @@
         android:id="@+id/btnCompras"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="#197653"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#FFFFFF"
         android:text="Compras e historial"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="#174D3D"
         android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnGastosCompartidos"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="#197653"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#FFFFFF"
         android:text="Gastos compartidos y deudas"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp" />
+        android:textColor="#174D3D"
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/btnContactos"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:layout_marginBottom="28dp"
-        android:backgroundTint="#197653"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#FFFFFF"
         android:text="Agenda de contactos"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="#174D3D"
         android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnMapa"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="#197653"
+        android:layout_height="58dp"
+        android:backgroundTint="#D8EEE5"
         android:text="Mapa de movimientos"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="#174D3D"
         android:textSize="16sp" />
 
+    <!-- Pie de pantalla -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="Tus finanzas, bajo tu control"
-        android:textColor="#648076"
-        android:textSize="13sp" />
+        android:text="Tus finanzas, bajo tu control."
+        android:textColor="#687B74"
+        android:textSize="12sp" />
 
 </LinearLayout>
