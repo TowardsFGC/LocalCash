@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F3F7F5"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Gestión de deudas"
+        android:textColor="#145A46"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Consulta los reembolsos pendientes de tus contactos."
+        android:textColor="#648076"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvResumenDeudas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Deudas pendientes: 0"
+        android:textColor="#193C32"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSinDeudas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="No hay deudas pendientes."
+        android:textColor="#648076"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Selecciona una deuda"
+        android:textColor="#193C32"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rgDeudasPendientes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <Button
+            android:id="@+id/btnAnteriorDeudas"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="Anterior"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/tvPaginaDeudas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Página 1 de 1"
+            android:textColor="#193C32"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnSiguienteDeudas"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="Siguiente"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnMarcarDeudaPagada"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#197653"
+        android:text="Registrar pago de deuda"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnVolverDeudas"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:text="Volver"
+        android:textAllCaps="false" />
+
+</LinearLayout>

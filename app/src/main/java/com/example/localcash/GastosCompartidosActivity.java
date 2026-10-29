@@ -1,7 +1,7 @@
-
 package com.example.localcash;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -82,7 +82,9 @@ public class GastosCompartidosActivity extends AppCompatActivity {
         etNombreGasto = findViewById(R.id.etNombreGasto);
         etMontoGasto = findViewById(R.id.etMontoGasto);
 
-        tvSinCuentasGasto = findViewById(R.id.tvSinCuentasGasto);
+        tvSinCuentasGasto =
+                findViewById(R.id.tvSinCuentasGasto);
+
         tvSinContactosGasto =
                 findViewById(R.id.tvSinContactosGasto);
 
@@ -91,6 +93,9 @@ public class GastosCompartidosActivity extends AppCompatActivity {
 
         btnGuardarGastoCompartido =
                 findViewById(R.id.btnGuardarGastoCompartido);
+
+        Button btnGestionarDeudas =
+                findViewById(R.id.btnGestionarDeudas);
 
         Button btnVolverGastoCompartido =
                 findViewById(R.id.btnVolverGastoCompartido);
@@ -103,6 +108,16 @@ public class GastosCompartidosActivity extends AppCompatActivity {
 
         btnGuardarGastoCompartido.setOnClickListener(
                 v -> guardarGastoCompartido());
+
+        // Abrir la pantalla de gestión de deudas.
+        btnGestionarDeudas.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    GastosCompartidosActivity.this,
+                    DeudasActivity.class
+            );
+
+            startActivity(intent);
+        });
 
         btnVolverGastoCompartido.setOnClickListener(
                 v -> finish());
@@ -200,6 +215,7 @@ public class GastosCompartidosActivity extends AppCompatActivity {
     }
 
     private void actualizarEstadoBoton() {
+
         btnGuardarGastoCompartido.setEnabled(
                 hayCuentas && hayContactos);
     }
@@ -239,7 +255,8 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                 .replace(",", ".");
 
         if (montoTexto.isEmpty()) {
-            etMontoGasto.setError("Ingresa el monto total");
+            etMontoGasto.setError(
+                    "Ingresa el monto total");
             etMontoGasto.requestFocus();
             return;
         }
@@ -249,7 +266,8 @@ public class GastosCompartidosActivity extends AppCompatActivity {
         try {
             montoIngresado = Double.parseDouble(montoTexto);
         } catch (NumberFormatException e) {
-            etMontoGasto.setError("Ingresa un monto válido");
+            etMontoGasto.setError(
+                    "Ingresa un monto válido");
             etMontoGasto.requestFocus();
             return;
         }
@@ -277,7 +295,9 @@ public class GastosCompartidosActivity extends AppCompatActivity {
         ArrayList<Long> contactosSeleccionados =
                 new ArrayList<>();
 
-        for (int i = 0; i < llContactosGasto.getChildCount(); i++) {
+        for (int i = 0;
+             i < llContactosGasto.getChildCount();
+             i++) {
 
             View elemento = llContactosGasto.getChildAt(i);
 
@@ -304,8 +324,9 @@ public class GastosCompartidosActivity extends AppCompatActivity {
             return;
         }
 
-        // El total se reparte entre el usuario y sus contactos.
-        int totalParticipantes = contactosSeleccionados.size() + 1;
+        // Se divide el total entre el usuario y los contactos.
+        int totalParticipantes =
+                contactosSeleccionados.size() + 1;
 
         long parteBase = montoTotal / totalParticipantes;
         long resto = montoTotal % totalParticipantes;
@@ -331,6 +352,7 @@ public class GastosCompartidosActivity extends AppCompatActivity {
         db.beginTransaction();
 
         try {
+
             // Registrar el pago total como un único egreso.
             ContentValues movimiento = new ContentValues();
 
@@ -353,7 +375,7 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                         "No se pudo registrar el egreso");
             }
 
-            // Crear el gasto compartido y vincular el movimiento.
+            // Guardar el gasto compartido.
             ContentValues gasto = new ContentValues();
 
             gasto.put("nombre", nombre);
@@ -374,8 +396,7 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                         "No se pudo registrar el gasto compartido");
             }
 
-            // Cada contacto debe su parte.
-            // El usuario asume su parte y el resto del reparto.
+            // Registrar una deuda pendiente por contacto.
             for (Long contactoId : contactosSeleccionados) {
 
                 ContentValues deuda = new ContentValues();
@@ -416,23 +437,28 @@ public class GastosCompartidosActivity extends AppCompatActivity {
             return;
         }
 
+        NumberFormat formatoMoneda =
+                NumberFormat.getCurrencyInstance(
+                        new Locale("es", "CL"));
+
+        formatoMoneda.setMaximumFractionDigits(0);
+        formatoMoneda.setMinimumFractionDigits(0);
+
         Toast.makeText(
                 this,
                 "Gasto guardado. Cada contacto debe " +
-                        NumberFormat.getCurrencyInstance(
-                                        new Locale("es", "CL"))
-                                .format(parteBase) +
+                        formatoMoneda.format(parteBase) +
                         ". Tu parte es " +
-                        NumberFormat.getCurrencyInstance(
-                                        new Locale("es", "CL"))
-                                .format(parteBase + resto),
+                        formatoMoneda.format(parteBase + resto),
                 Toast.LENGTH_LONG
         ).show();
 
         etNombreGasto.setText("");
         etMontoGasto.setText("");
 
-        for (int i = 0; i < llContactosGasto.getChildCount(); i++) {
+        for (int i = 0;
+             i < llContactosGasto.getChildCount();
+             i++) {
 
             View elemento = llContactosGasto.getChildAt(i);
 
@@ -458,7 +484,8 @@ public class GastosCompartidosActivity extends AppCompatActivity {
         formatoMoneda.setMinimumFractionDigits(0);
 
         String consulta =
-                "SELECT g.id, g.nombre, g.monto_total, g.fecha, a.nombre " +
+                "SELECT g.id, g.nombre, g.monto_total, " +
+                        "g.fecha, a.nombre " +
                         "FROM gastos_compartidos g " +
                         "INNER JOIN cuentas a ON a.id = g.cuenta_id " +
                         "ORDER BY g.id DESC LIMIT 3";
@@ -486,7 +513,7 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                         .append(cuenta)
                         .append("\nFecha: ")
                         .append(fecha)
-                        .append("\nDeudas pendientes:\n");
+                        .append("\nDeudas:\n");
 
                 try (Cursor deudas = db.rawQuery(
                         "SELECT c.nombre, d.monto_deuda, d.estado " +
@@ -495,7 +522,9 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                                 "ON c.id = d.contacto_id " +
                                 "WHERE d.gasto_id = ? " +
                                 "ORDER BY c.nombre COLLATE NOCASE",
-                        new String[]{String.valueOf(gastoId)})) {
+                        new String[]{
+                                String.valueOf(gastoId)
+                        })) {
 
                     while (deudas.moveToNext()) {
 
@@ -503,7 +532,7 @@ public class GastosCompartidosActivity extends AppCompatActivity {
                         double montoDeuda = deudas.getDouble(1);
                         String estado = deudas.getString(2);
 
-                        texto.append("• ")
+                        texto.append("- ")
                                 .append(contacto)
                                 .append(": ")
                                 .append(formatoMoneda.format(montoDeuda))
@@ -523,8 +552,16 @@ public class GastosCompartidosActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
 
+        if (dbHelper != null && tvGastosCompartidos != null) {
+            mostrarGastosCompartidos();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
         if (dbHelper != null) {
             dbHelper.close();
         }

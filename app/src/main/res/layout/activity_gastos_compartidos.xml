@@ -137,4 +137,15 @@
         android:textColor="#193C32"
         android:textSize="12sp" />
 
+    <Button
+        android:id="@+id/btnGestionarDeudas"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#197653"
+        android:text="Gestionar deudas"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF" />
+
+
 </LinearLayout>
