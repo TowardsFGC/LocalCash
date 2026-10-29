@@ -1,11 +1,25 @@
 plugins {
     alias(libs.plugins.android.application)
 }
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { stream ->
+        localProperties.load(stream)
+    }
+}
+
+def mapTilerApiKey =
+        localProperties.getProperty("MAPTILER_API_KEY", "")
 
 android {
     namespace 'com.example.localcash'
     compileSdk {
         version = release(37)
+        buildFeatures {
+            buildConfig true
+        }
     }
 
     defaultConfig {
@@ -16,6 +30,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "MAPTILER_API_KEY",
+                "\"${mapTilerApiKey}\""
     }
 
     buildTypes {
@@ -41,4 +57,6 @@ dependencies {
     androidTestImplementation libs.ext.junit
     // Autenticación biométrica
     implementation 'androidx.biometric:biometric:1.1.0'
+    // mapa
+    implementation 'org.maplibre.gl:android-sdk:11.13.5'
 }

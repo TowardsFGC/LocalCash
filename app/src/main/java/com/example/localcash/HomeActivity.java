@@ -1,9 +1,9 @@
+
 package com.example.localcash;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,14 +36,23 @@ public class HomeActivity extends AppCompatActivity {
                     return insets;
                 });
 
-        Button btnCuentas = findViewById(R.id.btnCuentas);
-        Button btnCompras = findViewById(R.id.btnCompras);
+        // Obtener los botones del menú principal.
+        Button btnCuentas =
+                findViewById(R.id.btnCuentas);
+
+        Button btnCompras =
+                findViewById(R.id.btnCompras);
 
         Button btnGastosCompartidos =
                 findViewById(R.id.btnGastosCompartidos);
 
-        Button btnContactos = findViewById(R.id.btnContactos);
+        Button btnContactos =
+                findViewById(R.id.btnContactos);
 
+        Button btnMapa =
+                findViewById(R.id.btnMapa);
+
+        // Abrir el módulo de cuentas.
         btnCuentas.setOnClickListener(v -> {
             Intent intent = new Intent(
                     HomeActivity.this,
@@ -53,6 +62,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Abrir el módulo de compras.
         btnCompras.setOnClickListener(v -> {
             Intent intent = new Intent(
                     HomeActivity.this,
@@ -62,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Abrir los gastos compartidos.
         btnGastosCompartidos.setOnClickListener(v -> {
             Intent intent = new Intent(
                     HomeActivity.this,
@@ -71,6 +82,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Abrir la agenda de contactos.
         btnContactos.setOnClickListener(v -> {
             Intent intent = new Intent(
                     HomeActivity.this,
@@ -79,13 +91,15 @@ public class HomeActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
-    }
 
-    private void mostrarMensaje(String modulo) {
-        Toast.makeText(
-                this,
-                modulo + ": módulo en desarrollo",
-                Toast.LENGTH_SHORT
-        ).show();
+        // Abrir el mapa de movimientos.
+        btnMapa.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    HomeActivity.this,
+                    MapaActivity.class
+            );
+
+            startActivity(intent);
+        });
     }
 }

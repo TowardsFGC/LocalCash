@@ -107,11 +107,20 @@
         android:singleLine="true"
         android:padding="8dp" />
 
+    <CheckBox
+        android:id="@+id/cbGuardarUbicacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Guardar ubicación actual (opcional)"
+        android:textColor="#193C32"
+        android:textSize="13sp" />
+
     <Button
         android:id="@+id/btnGuardarMovimiento"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:backgroundTint="#197653"
         android:text="Guardar movimiento"
         android:textAllCaps="false"

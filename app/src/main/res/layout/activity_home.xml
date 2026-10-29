@@ -79,6 +79,17 @@
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
 
+    <Button
+        android:id="@+id/btnMapa"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#197653"
+        android:text="Mapa de movimientos"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
