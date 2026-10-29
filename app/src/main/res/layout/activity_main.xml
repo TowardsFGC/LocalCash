@@ -1,80 +1,128 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F3F7F5"
+    android:background="#0B100F"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="28dp">
+
+        <!-- Identidad de la aplicación -->
+        <TextView
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:background="@drawable/lc_logo_bg"
+            android:gravity="center"
+            android:text="LC"
+            android:textColor="#43E0A0"
+            android:textSize="27sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
             android:text="LocalCash"
-            android:textColor="#145A46"
-            android:textSize="36sp"
-            android:textStyle="bold" />
+            android:textColor="#FFFFFF"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            android:letterSpacing="-0.02" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="TUS FINANZAS BAJO TU CONTROL"
-            android:textColor="#648076"
-            android:textSize="12sp"
-            android:letterSpacing="0.08" />
+            android:text="TUS FINANZAS, BAJO TU CONTROL"
+            android:textColor="#8D9B95"
+            android:textSize="11sp"
+            android:letterSpacing="0.12" />
 
+        <!-- Separador -->
         <View
-            android:layout_width="64dp"
-            android:layout_height="4dp"
-            android:layout_marginTop="28dp"
-            android:background="#28A879" />
+            android:layout_width="42dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="34dp"
+            android:background="#25C987" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:gravity="center"
-            android:text="¡Bienvenid@!"
-            android:textColor="#193C32"
-            android:textSize="28sp"
+            android:text="Bienvenido"
+            android:textColor="#F5F8F6"
+            android:textSize="29sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:gravity="center"
             android:lineSpacingExtra="5dp"
-            android:text="Organiza tus cuentas, registra tus gastos y planifica tus compras desde un solo lugar."
-            android:textColor="#61746C"
-            android:textSize="16sp" />
+            android:text="Administra tus cuentas, controla tus gastos y organiza tu dinero en un solo lugar."
+            android:textColor="#A1ADA7"
+            android:textSize="15sp" />
 
-        <Button
-            android:id="@+id/btnHuella"
+        <!-- Acceso biométrico -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="36dp"
-            android:backgroundTint="#197653"
-            android:text="Desbloquear con huella"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:background="@drawable/lc_panel"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACCESO SEGURO"
+                android:textColor="#43E0A0"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.10" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="Entra con tu huella"
+                android:textColor="#FFFFFF"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnHuella"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lc_button_dark"
+                android:backgroundTint="@null"
+                android:text="Desbloquear con huella"
+                android:textAllCaps="false"
+                android:textColor="#06130D"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="25dp"
             android:gravity="center"
             android:text="Tu información financiera permanece en tu dispositivo."
-            android:textColor="#71847B"
+            android:textColor="#718079"
             android:textSize="12sp" />
 
     </LinearLayout>
