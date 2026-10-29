@@ -1,4 +1,3 @@
-
 package com.example.localcash;
 
 import android.content.Context;
@@ -8,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class LocalCashDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "localcash.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     public LocalCashDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,10 +48,13 @@ public class LocalCashDbHelper extends SQLiteOpenHelper {
                         ")"
         );
 
+        // Crear contactos antes de las compras porque estas pueden asociarse
+        // opcionalmente con un contacto.
+        crearTablaContactos(db);
         crearTablaComprasActual(db);
         crearIndiceCompras(db);
-        crearTablaContactos(db);
         crearTablasGastosCompartidos(db);
+        crearTablaDetallesGasto(db);
     }
 
     private void crearTablaComprasActual(SQLiteDatabase db) {
@@ -68,9 +70,12 @@ public class LocalCashDbHelper extends SQLiteOpenHelper {
                         "fecha_registro TEXT NOT NULL, " +
                         "cuenta_id INTEGER, " +
                         "movimiento_id INTEGER, " +
+                        "contacto_id INTEGER, " +
                         "FOREIGN KEY(cuenta_id) REFERENCES cuentas(id) " +
                         "ON DELETE SET NULL, " +
                         "FOREIGN KEY(movimiento_id) REFERENCES movimientos(id) " +
+                        "ON DELETE SET NULL, " +
+                        "FOREIGN KEY(contacto_id) REFERENCES contactos(id) " +
                         "ON DELETE SET NULL" +
                         ")"
         );
@@ -147,6 +152,18 @@ public class LocalCashDbHelper extends SQLiteOpenHelper {
         );
     }
 
+    private void crearTablaDetallesGasto(SQLiteDatabase db) {
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS gastos_compartidos_detalles (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "gasto_id INTEGER NOT NULL, " +
+                        "descripcion TEXT NOT NULL, " +
+                        "FOREIGN KEY(gasto_id) REFERENCES gastos_compartidos(id) " +
+                        "ON DELETE CASCADE" +
+                        ")"
+        );
+    }
+
     @Override
     public void onUpgrade(
             SQLiteDatabase db,
@@ -180,6 +197,14 @@ public class LocalCashDbHelper extends SQLiteOpenHelper {
 
         if (oldVersion < 5) {
             crearTablasGastosCompartidos(db);
+        }
+
+        if (oldVersion < 6) {
+            db.execSQL(
+                    "ALTER TABLE compras ADD COLUMN contacto_id INTEGER " +
+                            "REFERENCES contactos(id) ON DELETE SET NULL"
+            );
+            crearTablaDetallesGasto(db);
         }
     }
 }

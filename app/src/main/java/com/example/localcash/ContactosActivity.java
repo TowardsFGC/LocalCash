@@ -227,7 +227,7 @@ public class ContactosActivity extends AppCompatActivity {
         tvContactosRegistrados.setText(texto.toString());
     }
 
-    @Override
+
     protected void onResume() {
         super.onResume();
 
@@ -236,7 +236,7 @@ public class ContactosActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+
     protected void onDestroy() {
         if (dbHelper != null) {
             dbHelper.close();

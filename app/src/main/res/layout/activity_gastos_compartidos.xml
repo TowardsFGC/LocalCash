@@ -1,151 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#F3F7F5"
+    android:fillViewport="true"
     android:padding="12dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gastos compartidos y deudas"
-        android:textColor="#145A46"
-        android:textSize="23sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="Divide gastos con tus contactos."
-        android:textColor="#648076"
-        android:textSize="13sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="Cuenta que pagó"
-        android:textColor="#193C32"
-        android:textStyle="bold" />
-
-    <RadioGroup
-        android:id="@+id/rgCuentasGasto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
-
-    <TextView
-        android:id="@+id/tvSinCuentasGasto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Primero crea una cuenta."
-        android:textColor="#B3261E"
-        android:visibility="gone" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="Nombre del gasto grupal"
-        android:textColor="#193C32"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/etNombreGasto"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:hint="Ej.: Cena con amigos"
-        android:inputType="textCapSentences"
-        android:singleLine="true"
-        android:padding="6dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Monto total (CLP)"
-        android:textColor="#193C32"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/etMontoGasto"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:hint="Ej.: 30000"
-        android:inputType="numberDecimal"
-        android:singleLine="true"
-        android:padding="6dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="Selecciona los contactos participantes"
-        android:textColor="#193C32"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvSinContactosGasto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Primero registra contactos en la agenda."
-        android:textColor="#B3261E"
-        android:visibility="gone" />
-
     <LinearLayout
-        android:id="@+id/llContactosGasto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnGuardarGastoCompartido"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="#197653"
-        android:text="Registrar gasto compartido"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gastos compartidos y deudas"
+            android:textColor="#145A46"
+            android:textSize="23sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnVolverGastoCompartido"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="Volver al menú"
-        android:textAllCaps="false" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Divide gastos con tus contactos."
+            android:textColor="#648076"
+            android:textSize="13sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="Últimos gastos compartidos"
-        android:textColor="#145A46"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Cuenta que pagó"
+            android:textColor="#193C32"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvGastosCompartidos"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="3dp"
-        android:gravity="top"
-        android:text="Todavía no hay gastos compartidos."
-        android:textColor="#193C32"
-        android:textSize="12sp" />
+        <RadioGroup
+            android:id="@+id/rgCuentasGasto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
-    <Button
-        android:id="@+id/btnGestionarDeudas"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="#197653"
-        android:text="Gestionar deudas"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/tvSinCuentasGasto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Primero crea una cuenta."
+            android:textColor="#B3261E"
+            android:visibility="gone" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Nombre del gasto grupal"
+            android:textColor="#193C32"
+            android:textStyle="bold" />
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/etNombreGasto"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:hint="Ej.: Cena con amigos"
+            android:inputType="textCapSentences"
+            android:singleLine="true"
+            android:padding="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Monto total (CLP)"
+            android:textColor="#193C32"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etMontoGasto"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:hint="Ej.: 30000"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:padding="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Productos o servicios (uno por línea)"
+            android:textColor="#193C32"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etDetalleGasto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="76dp"
+            android:gravity="top|start"
+            android:hint="Ej.: pizza, bebidas, postre (uno por línea)"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="4"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Selecciona los contactos participantes"
+            android:textColor="#193C32"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSinContactosGasto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Primero registra contactos en la agenda."
+            android:textColor="#B3261E"
+            android:visibility="gone" />
+
+        <CheckBox
+            android:id="@+id/cbRepartoPersonalizado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Personalizar cuánto debe cada contacto"
+            android:textColor="#193C32" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Si no marcas esta opción, el total se divide equitativamente entre tú y los contactos seleccionados."
+            android:textColor="#648076"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/llContactosGasto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/btnGuardarGastoCompartido"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="#197653"
+            android:text="Registrar gasto compartido"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnVolverGastoCompartido"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Volver al menú"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Últimos gastos compartidos"
+            android:textColor="#145A46"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvGastosCompartidos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:layout_marginTop="3dp"
+            android:gravity="top"
+            android:text="Todavía no hay gastos compartidos."
+            android:textColor="#193C32"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnGestionarDeudas"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="#197653"
+            android:text="Gestionar deudas"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>
